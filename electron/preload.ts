@@ -19,6 +19,10 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     return ipcRenderer.invoke(channel, ...omit)
   },
 
-  // You can expose other APTs you need here.
-  // ...
+})
+
+// Data storage API
+contextBridge.exposeInMainWorld('electronAPI', {
+  saveData: (data: any) => ipcRenderer.invoke('save-data', data),
+  loadData: () => ipcRenderer.invoke('load-data'),
 })

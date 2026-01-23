@@ -1,6 +1,7 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
+import { promises as fs } from 'fs'
 import path from 'node:path'
 
 const require = createRequire(import.meta.url)
@@ -62,6 +63,40 @@ app.on('activate', () => {
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow()
+  }
+})
+
+// Data storage functions
+const getDataPath = () => {
+  return path.join(app.getPath('userData'), 'data.json')
+}
+
+// IPC handlers for data persistence
+ipcMain.handle('save-data', async (event, data) => {
+  try {
+    const dataPath = getDataPath()
+    
+    // Ensure directory exists
+    const dir = path.dirname(dataPath)
+    await fs.mkdir(dir, { recursive: true })
+    
+    await fs.writeFile(dataPath, JSON.stringify(data, null, 2))
+    return { success: true }
+  } catch (error) {
+    console.error('Save failed:', error)
+    return { success: false, error: error.message }
+  }
+})
+
+ipcMain.handle('load-data', async () => {
+  try {
+    const dataPath = getDataPath()
+    const data = await fs.readFile(dataPath, 'utf8')
+    return { success: true, data: JSON.parse(data) }
+  } catch (error) {
+    // File doesn't exist or is corrupted - return empty structure
+    console.log('No existing data file found, returning empty structure')
+    return { success: true, data: { categories: [] } }
   }
 })
 

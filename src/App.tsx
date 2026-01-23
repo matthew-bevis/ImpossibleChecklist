@@ -1,33 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/electron-vite.animate.svg'
+import { Grid, Typography } from '@mui/material'
 import './App.css'
+import classes from './_styles/mui-styles'
+import AddCategoryButton from './_components/CategoryPopup/add-category-button'
+import ListDisplay from './_components/ListDisplay/list-display'
+import { useElectronData } from './_hooks/useElectronData'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { 
+    categories, 
+    isLoading, 
+    error, 
+    hasUnsavedChanges,
+    isSaving,
+    addCategory,
+    updateCategories,
+    saveData,
+    reloadData
+  } = useElectronData();
 
   return (
     <>
-      <div>
-        <a href="https://electron-vite.github.io" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Grid container sx={classes.mainContainer}>
+        <Grid container sx={classes.titleContainer}>
+          <Typography variant="h1" sx={classes.titleText}>
+            Impossible Checklist
+          </Typography>
+        </Grid>
+        <AddCategoryButton onAddCategory={addCategory} />
+        <Grid container sx={classes.categoryContainer}>
+          <ListDisplay 
+            categories={categories}
+            isLoading={isLoading}
+            error={error}
+            hasUnsavedChanges={hasUnsavedChanges}
+            isSaving={isSaving}
+            updateCategories={updateCategories}
+            saveData={saveData}
+            reloadData={reloadData}
+          />
+        </Grid>
+      </Grid>
     </>
   )
 }
