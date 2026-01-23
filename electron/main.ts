@@ -1,10 +1,8 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
-import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import { promises as fs } from 'fs'
 import path from 'node:path'
 
-const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // The built directory structure
@@ -34,6 +32,8 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.mjs'),
     },
   })
+
+  // No special close handling needed with autosave - just close normally
 
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', () => {
@@ -72,7 +72,7 @@ const getDataPath = () => {
 }
 
 // IPC handlers for data persistence
-ipcMain.handle('save-data', async (event, data) => {
+ipcMain.handle('save-data', async (_, data) => {
   try {
     const dataPath = getDataPath()
     
@@ -84,7 +84,8 @@ ipcMain.handle('save-data', async (event, data) => {
     return { success: true }
   } catch (error) {
     console.error('Save failed:', error)
-    return { success: false, error: error.message }
+    const message = error instanceof Error ? error.message : 'Unknown error'
+    return { success: false, error: message }
   }
 })
 

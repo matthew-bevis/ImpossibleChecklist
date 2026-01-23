@@ -14,7 +14,6 @@ const AddCategoryPopup: React.FC<{
 }> = ({ open, onClose, onAddCategory }) => {
     const [categoryName, setCategoryName] = useState('')
     const handleAdd = () => {
-        console.log('AddCategoryPopup handleAdd called with:', categoryName);
         onAddCategory(categoryName)
         setCategoryName('')
         onClose()

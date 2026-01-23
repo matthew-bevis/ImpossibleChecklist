@@ -15,7 +15,8 @@
     "target": [
       "dmg"
     ],
-    "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
+    "artifactName": "${productName}-Mac-${version}-Installer.${ext}",
+    "identity": null
   },
   "win": {
     "target": [
@@ -26,7 +27,9 @@
         ]
       }
     ],
-    "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
+    "artifactName": "${productName}-Windows-${version}-Setup.${ext}",
+    "certificateFile": null,
+    "certificatePassword": null
   },
   "nsis": {
     "oneClick": false,

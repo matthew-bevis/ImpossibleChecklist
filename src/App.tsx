@@ -10,11 +10,10 @@ function App() {
     categories, 
     isLoading, 
     error, 
-    hasUnsavedChanges,
     isSaving,
+    justSaved,
     addCategory,
     updateCategories,
-    saveData,
     reloadData
   } = useElectronData();
 
@@ -25,6 +24,23 @@ function App() {
           <Typography variant="h1" sx={classes.titleText}>
             Impossible Checklist
           </Typography>
+          {(isSaving || justSaved) && (
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                position: 'fixed', 
+                top: 16, 
+                right: 16, 
+                backgroundColor: justSaved ? '#4caf50' : '#ff9800',
+                color: 'white',
+                padding: '8px 16px',
+                borderRadius: '4px',
+                zIndex: 1000
+              }}
+            >
+              {isSaving ? 'Saving...' : 'Saved'}
+            </Typography>
+          )}
         </Grid>
         <AddCategoryButton onAddCategory={addCategory} />
         <Grid container sx={classes.categoryContainer}>
@@ -32,10 +48,7 @@ function App() {
             categories={categories}
             isLoading={isLoading}
             error={error}
-            hasUnsavedChanges={hasUnsavedChanges}
-            isSaving={isSaving}
             updateCategories={updateCategories}
-            saveData={saveData}
             reloadData={reloadData}
           />
         </Grid>

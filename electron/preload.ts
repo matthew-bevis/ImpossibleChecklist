@@ -23,6 +23,6 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 
 // Data storage API
 contextBridge.exposeInMainWorld('electronAPI', {
-  saveData: (data: any) => ipcRenderer.invoke('save-data', data),
-  loadData: () => ipcRenderer.invoke('load-data'),
+  saveData: (data: unknown) => ipcRenderer.invoke('save-data', data),
+  loadData: () => ipcRenderer.invoke('load-data')
 })

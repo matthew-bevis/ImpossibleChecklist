@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Category } from '../_components/ListDisplay/interfaces/category';
 import { ElectronData } from '../types/electron';
 
@@ -6,15 +6,13 @@ interface UseElectronDataReturn {
     categories: Category[];
     isLoading: boolean;
     error: string | null;
-    hasUnsavedChanges: boolean;
     isSaving: boolean;
+    justSaved: boolean;
     
     // Actions
     updateCategories: (newCategories: Category[]) => void;
     addCategory: (categoryName: string) => void;
-    saveData: () => Promise<boolean>;
     reloadData: () => Promise<void>;
-    resetUnsavedChanges: () => void;
 }
 
 export const useElectronData = (): UseElectronDataReturn => {
@@ -22,14 +20,24 @@ export const useElectronData = (): UseElectronDataReturn => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const [justSaved, setJustSaved] = useState(false);
+    
+    // Debounce timer for autosave
+    const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     // Load data from Electron storage
     const loadData = useCallback(async () => {
         try {
             setIsLoading(true);
             setError(null);
+            
+            // Check if running in Electron environment
+            if (!window.electronAPI) {
+                setCategories([]);
+                setIsLoading(false);
+                return;
+            }
             
             const result = await window.electronAPI.loadData();
             
@@ -49,86 +57,94 @@ export const useElectronData = (): UseElectronDataReturn => {
         }
     }, []);
 
-    // Save data to Electron storage
-    const saveData = useCallback(async (): Promise<boolean> => {
-        try {
-            setIsSaving(true);
-            
-            const dataToSave: ElectronData = { categories };
-            const result = await window.electronAPI.saveData(dataToSave);
-            
-            if (result.success) {
-                setHasUnsavedChanges(false);
-                console.log('Data saved successfully!');
-                return true;
-            } else {
-                throw new Error(result.error);
-            }
-        } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'Save failed';
-            console.error('Save error:', err);
-            alert(`Failed to save: ${errorMessage}`);
-            return false;
-        } finally {
-            setIsSaving(false);
+    // Auto-save function with debouncing
+    const autoSave = useCallback(async (categoriesToSave: Category[]) => {
+        // Clear existing timeout
+        if (saveTimeoutRef.current) {
+            clearTimeout(saveTimeoutRef.current);
         }
-    }, [categories]);
-
-    // Update categories and mark as changed
-    const updateCategories = useCallback((newCategories: Category[]) => {
-        setCategories(newCategories);
-        setHasUnsavedChanges(true);
+        
+        // Set up new save with 500ms delay
+        saveTimeoutRef.current = setTimeout(async () => {
+            try {
+                setIsSaving(true);
+                
+                // Check if running in Electron environment
+                if (!window.electronAPI) {
+                    console.warn('ElectronAPI not available - cannot autosave');
+                    return;
+                }
+                
+                const dataToSave: ElectronData = { categories: categoriesToSave };
+                const result = await window.electronAPI.saveData(dataToSave);
+                
+                if (result.success) {
+                    setJustSaved(true);
+                    // Hide the "saved" indicator after 2 seconds
+                    setTimeout(() => setJustSaved(false), 2000);
+                    console.log('Data auto-saved successfully!');
+                } else {
+                    console.error('Auto-save failed:', result.error);
+                }
+            } catch (err) {
+                console.error('Auto-save error:', err);
+            } finally {
+                setIsSaving(false);
+            }
+        }, 500);
     }, []);
 
-    // Add new category
+    // Update categories and trigger autosave
+    const updateCategories = useCallback((newCategories: Category[]) => {
+        setCategories(newCategories);
+        autoSave(newCategories);
+    }, [autoSave]);
+
+    // Add new category and trigger autosave
     const addCategory = useCallback((categoryName: string) => {
-        console.log('addCategory called with:', categoryName);
-        console.log('Current categories count:', categories.length);
-        
         const newCategory: Category = {
             id: `category-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
             title: categoryName,
-            order: categories.length, // Add to end
+            order: categories.length,
             items: []
         };
         
-        console.log('New category created:', newCategory);
-        
         const updatedCategories = [...categories, newCategory];
-        console.log('Updated categories array:', updatedCategories);
-        
         setCategories(updatedCategories);
-        setHasUnsavedChanges(true);
-    }, [categories]);
+        autoSave(updatedCategories);
+    }, [categories, autoSave]);
 
     // Reload data (for retry functionality)
     const reloadData = useCallback(async () => {
         await loadData();
     }, [loadData]);
 
-    // Reset unsaved changes flag
-    const resetUnsavedChanges = useCallback(() => {
-        setHasUnsavedChanges(false);
-    }, []);
-
     // Load data on mount
     useEffect(() => {
         loadData();
     }, [loadData]);
+
+    // Cleanup timeout on unmount
+    useEffect(() => {
+        const timeoutRef = saveTimeoutRef.current;
+        return () => {
+            if (timeoutRef) {
+                clearTimeout(timeoutRef);
+            }
+        };
+    }, []);
 
     return {
         // State
         categories,
         isLoading,
         error,
-        hasUnsavedChanges,
         isSaving,
+        justSaved,
         
         // Actions
         updateCategories,
         addCategory,
-        saveData,
-        reloadData,
-        resetUnsavedChanges
+        reloadData
     };
 };

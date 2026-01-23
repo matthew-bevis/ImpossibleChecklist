@@ -3,17 +3,13 @@ import { DropResult } from "@hello-pangea/dnd"
 import { Category } from './interfaces/category'
 import CategoryList from './category-list'
 import LoadingSpinner from '../LoadingSpinner/loading-spinner'
-import SaveButton from '../SaveButton/save-button'
 import { Box, Typography, Button } from '@mui/material'
 
 interface ListDisplayProps {
     categories: Category[];
     isLoading: boolean;
     error: string | null;
-    hasUnsavedChanges: boolean;
-    isSaving: boolean;
     updateCategories: (newCategories: Category[]) => void;
-    saveData: () => Promise<boolean>;
     reloadData: () => Promise<void>;
 }
 
@@ -21,10 +17,7 @@ const ListDisplay: React.FC<ListDisplayProps> = ({
     categories,
     isLoading,
     error,
-    hasUnsavedChanges,
-    isSaving,
     updateCategories,
-    saveData,
     reloadData
 }) => {
 
@@ -71,15 +64,28 @@ const ListDisplay: React.FC<ListDisplayProps> = ({
 
     return (
         <>
-            <SaveButton 
-                hasUnsavedChanges={hasUnsavedChanges}
-                isSaving={isSaving}
-                onSave={saveData}
-            />
-            <CategoryList 
-                categories={categories} 
-                onDragEnd={handleOnDragEnd} 
-            />
+            {categories.length === 0 ? (
+                <Box 
+                    display="flex" 
+                    flexDirection="column" 
+                    alignItems="center" 
+                    justifyContent="center" 
+                    height="200px"
+                    gap={2}
+                >
+                    <Typography variant="h6" color="textSecondary">
+                        No categories yet
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                        Click the + button to add your first category
+                    </Typography>
+                </Box>
+            ) : (
+                <CategoryList 
+                    categories={categories} 
+                    onDragEnd={handleOnDragEnd} 
+                />
+            )}
         </>
     );
 };

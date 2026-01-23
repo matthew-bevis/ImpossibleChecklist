@@ -1,4 +1,4 @@
-import { Category } from '../_components/ListDisplay/interfaces/category';
+import { Category } from './category';
 
 export interface DraggableContainerProps {
     category: Category;
