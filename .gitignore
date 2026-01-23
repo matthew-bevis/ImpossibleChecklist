@@ -82,6 +82,9 @@ out
 .nuxt
 dist
 .output
+dist-electron/
+public/
+release/
 
 # Gatsby files
 .cache/
