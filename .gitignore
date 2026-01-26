@@ -41,6 +41,11 @@ build/Release
 node_modules/
 jspm_packages/
 
+# Electron build output
+dist/
+dist-electron/
+release/
+
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
