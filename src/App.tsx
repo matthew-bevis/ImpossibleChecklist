@@ -3,19 +3,13 @@ import './App.css'
 import classes from './_styles/mui-styles'
 import AddCategoryButton from './_components/CategoryPopup/add-category-button'
 import ListDisplay from './_components/ListDisplay/list-display'
-import { useElectronData } from './_hooks/useElectronData'
+import { CategoriesProvider, useCategories } from './contexts/CategoriesContext'
 
-function App() {
+function AppContent() {
   const { 
-    categories, 
-    isLoading, 
-    error, 
     isSaving,
-    justSaved,
-    addCategory,
-    updateCategories,
-    reloadData
-  } = useElectronData();
+    justSaved
+  } = useCategories();
 
   return (
     <>
@@ -42,19 +36,21 @@ function App() {
             </Typography>
           )}
         </Grid>
-        <AddCategoryButton onAddCategory={addCategory} />
+        <AddCategoryButton />
         <Grid container sx={classes.categoryContainer}>
-          <ListDisplay 
-            categories={categories}
-            isLoading={isLoading}
-            error={error}
-            updateCategories={updateCategories}
-            reloadData={reloadData}
-          />
+          <ListDisplay />
         </Grid>
       </Grid>
     </>
   )
+}
+
+function App() {
+  return (
+    <CategoriesProvider>
+      <AppContent />
+    </CategoriesProvider>
+  );
 }
 
 export default App

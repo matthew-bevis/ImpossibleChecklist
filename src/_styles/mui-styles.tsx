@@ -16,10 +16,13 @@ const classes = {
         width: '100%',  
     },
     categoryContainer: {
-        marginTop: '2rem',
         width: '100%',
-        justifyContent: 'flex-start',
+    },
+    categoryHeader: {
         alignItems: 'center',
+        justifyContent: 'space-between',
+        display: 'flex',
+        width: '100%',
     },
     categoryText: {
         fontSize: '2rem',
@@ -58,11 +61,14 @@ const classes = {
     categoryPaper: {
         padding: '1rem',
         marginBottom: '1rem',
+        width: '100%',
     },
     itemBox: {
         marginTop: '0.5rem',
-        display: 'flex',
         alignItems: 'center',
+        justifyContent: 'space-between',
+        display: 'flex',
+        width: '100%',
     }
 };
 

@@ -4,10 +4,11 @@ import { Fab, Box } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import classes from '../../_styles/mui-styles'
 import AddCategoryPopup from './add-category-popup'
-import { AddCategoryButtonProps } from './interfaces/add-category-button-props'
+import { useCategories } from '../../contexts/CategoriesContext'
 
 
-const AddCategoryButton: React.FC<AddCategoryButtonProps> = ({ onAddCategory }) => {
+const AddCategoryButton: React.FC = () => {
+    const { addCategory } = useCategories();
     const [open, setOpen] = useState(false);
 
     const handleOpenPopup = () => {
@@ -19,9 +20,7 @@ const AddCategoryButton: React.FC<AddCategoryButtonProps> = ({ onAddCategory }) 
     };
 
     const handleAddCategory = (categoryName: string) => {
-        if (onAddCategory) {
-            onAddCategory(categoryName);
-        }
+        addCategory(categoryName);
     };
 
     return (

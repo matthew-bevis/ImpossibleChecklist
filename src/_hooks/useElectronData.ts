@@ -12,6 +12,11 @@ interface UseElectronDataReturn {
     // Actions
     updateCategories: (newCategories: Category[]) => void;
     addCategory: (categoryName: string) => void;
+    deleteCategory: (categoryId: string) => void;
+    updateCategoryTitle: (categoryId: string, newTitle: string) => void;
+    addItem: (categoryId: string, itemContent: string) => void;
+    updateItemText: (categoryId: string, itemId: string, newContent: string) => void;
+    deleteItem: (categoryId: string, itemId: string) => void;
     reloadData: () => Promise<void>;
 }
 
@@ -100,6 +105,26 @@ export const useElectronData = (): UseElectronDataReturn => {
         autoSave(newCategories);
     }, [autoSave]);
 
+    //Update category title and trigger autosave
+    const updateCategoryTitle = useCallback((categoryId: string, newTitle: string) => {
+        const updatedCategories = categories.map(cat =>
+            cat.id === categoryId ? { ...cat, title: newTitle } : cat
+        );
+
+        setCategories(updatedCategories);
+        autoSave(updatedCategories);
+    }, [categories, autoSave]);
+
+    // Delete category by ID and trigger autosave
+    const deleteCategory = useCallback((categoryId: string) => {
+        const updatedCategories = categories
+            .filter(cat => cat.id !== categoryId)
+            .map((cat, index) => ({ ...cat, order:index })); // Reorder after deletion
+
+        setCategories(updatedCategories);
+        autoSave(updatedCategories);
+    }, [categories, autoSave]);
+
     // Add new category and trigger autosave
     const addCategory = useCallback((categoryName: string) => {
         const newCategory: Category = {
@@ -110,6 +135,55 @@ export const useElectronData = (): UseElectronDataReturn => {
         };
         
         const updatedCategories = [...categories, newCategory];
+        setCategories(updatedCategories);
+        autoSave(updatedCategories);
+    }, [categories, autoSave]);
+
+    // Add new item to category and trigger autosave
+    const addItem = useCallback((categoryId: string, itemContent: string) => {
+        const updatedCategories = categories.map(cat => {
+            if (cat.id === categoryId) {
+                const newItem = {
+                    id: `item-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+                    order: cat.items.length,
+                    text: itemContent,
+                    completed: false,
+                    createdAt: new Date().toISOString(),
+                };
+                return { ...cat, items: [...cat.items, newItem] };
+            }
+            return cat;
+        });
+
+        setCategories(updatedCategories);
+        autoSave(updatedCategories);
+    }, [categories, autoSave]);
+
+    // Update item text and trigger autosave
+    const updateItemText = useCallback((categoryId: string, itemId: string, newContent: string) => {
+        const updatedCategories = categories.map(cat => {
+            if (cat.id === categoryId) {
+                const updatedItems = cat.items.map(item =>
+                    item.id === itemId ? { ...item, text: newContent } : item
+                );
+                return { ...cat, items: updatedItems };
+            }
+            return cat;
+        });
+
+        setCategories(updatedCategories);
+        autoSave(updatedCategories);
+    }, [categories, autoSave]);
+
+    // Delete item from category and trigger autosave
+    const deleteItem = useCallback((categoryId: string, itemId: string) => {
+        const updatedCategories = categories.map(cat => {
+            if (cat.id === categoryId) {
+                const filteredItems = cat.items.filter(item => item.id !== itemId);
+                return { ...cat, items: filteredItems };
+            }
+            return cat;
+        });
         setCategories(updatedCategories);
         autoSave(updatedCategories);
     }, [categories, autoSave]);
@@ -145,6 +219,11 @@ export const useElectronData = (): UseElectronDataReturn => {
         // Actions
         updateCategories,
         addCategory,
-        reloadData
+        deleteCategory,
+        updateCategoryTitle,
+        updateItemText,
+        reloadData,
+        addItem,
+        deleteItem,
     };
 };

@@ -1,25 +1,13 @@
 import React from "react"
 import { DropResult } from "@hello-pangea/dnd"
-import { Category } from './interfaces/category'
-import CategoryList from './category-list'
+import CategoryList from '../CategoryList/category-list'
 import LoadingSpinner from '../LoadingSpinner/loading-spinner'
 import { Box, Typography, Button } from '@mui/material'
+import { useCategories } from '../../contexts/CategoriesContext'
 
-interface ListDisplayProps {
-    categories: Category[];
-    isLoading: boolean;
-    error: string | null;
-    updateCategories: (newCategories: Category[]) => void;
-    reloadData: () => Promise<void>;
-}
 
-const ListDisplay: React.FC<ListDisplayProps> = ({
-    categories,
-    isLoading,
-    error,
-    updateCategories,
-    reloadData
-}) => {
+const ListDisplay: React.FC = () => {
+    const { categories, isLoading, error, updateCategories, reloadData } = useCategories();
 
     const handleOnDragEnd = (result: DropResult) => {
         if (!result.destination) return;
@@ -70,7 +58,6 @@ const ListDisplay: React.FC<ListDisplayProps> = ({
                     flexDirection="column" 
                     alignItems="center" 
                     justifyContent="center" 
-                    height="200px"
                     gap={2}
                 >
                     <Typography variant="h6" color="textSecondary">
@@ -83,7 +70,7 @@ const ListDisplay: React.FC<ListDisplayProps> = ({
             ) : (
                 <CategoryList 
                     categories={categories} 
-                    onDragEnd={handleOnDragEnd} 
+                    onDragEnd={handleOnDragEnd}
                 />
             )}
         </>

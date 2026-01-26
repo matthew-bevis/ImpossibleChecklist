@@ -1,4 +1,4 @@
-import { Category } from './category';
+import { Category } from '../../ListDisplay/interfaces/category';
 import { DropResult } from '@hello-pangea/dnd';
 
 export interface CategoryListProps {

@@ -15,7 +15,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, onDragEnd }) =>
                             <DraggableContainer 
                                 key={category.id} 
                                 category={category} 
-                                index={index} 
+                                index={index}
                             />
                         ))}
                     </>

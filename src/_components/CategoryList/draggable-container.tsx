@@ -1,9 +1,12 @@
 import React from 'react';
 import { Draggable, DraggableProvided, DraggableStateSnapshot } from '@hello-pangea/dnd';
 import { Paper, Typography, Box } from '@mui/material';
-import CheckboxList from './checkbox';
+import CheckboxList from '../Checkbox/checkbox';
 import classes from '../../_styles/mui-styles';
 import { DraggableContainerProps } from './interfaces/draggable-container-props';
+import DeleteCategoryButton from '../DeleteCategory/delete-category-button';
+import EditCategoryButton from '../EditCategory/edit-category-button';
+import AddItemButton from '../AddItem/add-item-button';
 
 const DraggableContainer: React.FC<DraggableContainerProps> = ({ category, index }) => {
     return (
@@ -21,9 +24,17 @@ const DraggableContainer: React.FC<DraggableContainerProps> = ({ category, index
                     {...provided.dragHandleProps} 
                     ref={provided.innerRef}
                 >
-                    <Typography variant="h5" sx={classes.categoryText}>
-                        {category.title}<br /><hr />
-                    </Typography>
+                    <Box sx={classes.categoryHeader}>
+                        <Typography sx={classes.categoryText}>
+                            {category.title}
+                        </Typography>
+                        <Box>
+                            <AddItemButton categoryId={category.id} />
+                            <EditCategoryButton category={category} />
+                            <DeleteCategoryButton category={category} />
+                        </Box>
+                    </Box>
+                    <hr />
                     <Box sx={classes.itemBox}>
                         <CheckboxList category={category} />
                     </Box>
