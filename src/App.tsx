@@ -1,7 +1,7 @@
 import { Grid, Typography } from '@mui/material'
 import './App.css'
 import classes from './_styles/mui-styles'
-import AddCategoryButton from './_components/CategoryPopup/add-category-button'
+import AddCategoryButton from './_components/AddCategory/add-category-button'
 import ListDisplay from './_components/ListDisplay/list-display'
 import { CategoriesProvider, useCategories } from './contexts/CategoriesContext'
 

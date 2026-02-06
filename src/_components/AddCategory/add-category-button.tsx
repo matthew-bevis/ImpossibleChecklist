@@ -15,10 +15,6 @@ const AddCategoryButton: React.FC = () => {
         setOpen(true);
     };
 
-    const handleClosePopup = () => {
-        setOpen(false);
-    };
-
     const handleAddCategory = (categoryName: string) => {
         addCategory(categoryName);
     };
@@ -35,7 +31,7 @@ const AddCategoryButton: React.FC = () => {
             </Fab>
             <AddCategoryPopup
                 open={open}
-                onClose={handleClosePopup}
+                onClose={() => setOpen(false)}
                 onAddCategory={handleAddCategory}
             />
         </Box>

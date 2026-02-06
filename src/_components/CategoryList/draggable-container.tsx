@@ -1,7 +1,7 @@
 import React from 'react';
 import { Draggable, DraggableProvided, DraggableStateSnapshot } from '@hello-pangea/dnd';
 import { Paper, Typography, Box } from '@mui/material';
-import CheckboxList from '../Checkbox/checkbox';
+import CheckboxList from '../ItemList/checkbox';
 import classes from '../../_styles/mui-styles';
 import { DraggableContainerProps } from './interfaces/draggable-container-props';
 import DeleteCategoryButton from '../DeleteCategory/delete-category-button';
@@ -35,7 +35,7 @@ const DraggableContainer: React.FC<DraggableContainerProps> = ({ category, index
                         </Box>
                     </Box>
                     <hr />
-                    <Box sx={classes.itemBox}>
+                    <Box>
                         <CheckboxList category={category} />
                     </Box>
                 </Paper>

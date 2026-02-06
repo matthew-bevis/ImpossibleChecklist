@@ -31,8 +31,9 @@ const classes = {
     },
     listContainer: {
         width: '100%',
-        height: '60vh',
-        margin: '1rem',
+        display: 'flex',
+        justifyContent: 'space-between',   
+        alignItems: 'center',
     },
     listText: {
         fontSize: '1.5rem',
@@ -57,19 +58,21 @@ const classes = {
         position: 'fixed',
         bottom: '2rem',
         right: '2rem',
+        zIndex: 10,
     },
     categoryPaper: {
         padding: '1rem',
         marginBottom: '1rem',
         width: '100%',
     },
-    itemBox: {
-        marginTop: '0.5rem',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+    itemButtonBox: {
         display: 'flex',
-        width: '100%',
-    }
+        marginLeft: 'auto',
+    },
+    popupWindow: {
+        width: '75vw',
+        height: 'auto',
+    },
 };
 
 export default classes;

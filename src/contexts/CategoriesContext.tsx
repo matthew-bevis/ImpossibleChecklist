@@ -15,6 +15,7 @@ interface CategoriesContextType {
     updateCategoryTitle: (categoryId: string, newTitle: string) => void;
     addItem: (categoryId: string, itemContent: string) => void;
     updateItemText: (categoryId: string, itemId: string, newContent: string) => void;
+    updateItemCompletion: (categoryId: string, itemId: string, completed: boolean) => void;
     deleteItem: (categoryId: string, itemId: string) => void;
 }
 

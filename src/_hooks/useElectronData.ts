@@ -16,6 +16,7 @@ interface UseElectronDataReturn {
     updateCategoryTitle: (categoryId: string, newTitle: string) => void;
     addItem: (categoryId: string, itemContent: string) => void;
     updateItemText: (categoryId: string, itemId: string, newContent: string) => void;
+    updateItemCompletion: (categoryId: string, itemId: string, completed: boolean) => void;
     deleteItem: (categoryId: string, itemId: string) => void;
     reloadData: () => Promise<void>;
 }
@@ -175,6 +176,22 @@ export const useElectronData = (): UseElectronDataReturn => {
         autoSave(updatedCategories);
     }, [categories, autoSave]);
 
+    // Save item completion status and trigger autosave
+    const updateItemCompletion = useCallback((categoryId: string, itemId: string, completed: boolean) => {
+        const updatedCategories = categories.map(cat => {
+            if (cat.id === categoryId) {
+                const updatedItems = cat.items.map(item =>
+                    item.id === itemId ? { ...item, completed } : item
+                );
+                return { ...cat, items: updatedItems };
+            }
+            return cat;
+        });
+
+        setCategories(updatedCategories);
+        autoSave(updatedCategories);
+    }, [categories, autoSave]);
+
     // Delete item from category and trigger autosave
     const deleteItem = useCallback((categoryId: string, itemId: string) => {
         const updatedCategories = categories.map(cat => {
@@ -222,6 +239,7 @@ export const useElectronData = (): UseElectronDataReturn => {
         deleteCategory,
         updateCategoryTitle,
         updateItemText,
+        updateItemCompletion,
         reloadData,
         addItem,
         deleteItem,
