@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
-import classes from '../../_styles/mui-styles'
+import classes from '../../styles/mui-styles'
 
 const AddCategoryPopup: React.FC<{
     open: boolean,

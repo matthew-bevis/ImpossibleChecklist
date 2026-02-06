@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from '@mui/material/Button';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Box } from '@mui/material';
 import { AddItemPopupProps } from './interfaces/add-item-popup-props';
-import classes from "../../_styles/mui-styles";
+import classes from "../../styles/mui-styles";
 
 const AddItemPopup: React.FC<AddItemPopupProps> = ({ open, onClose, onAddItem }) => {
     const [itemContent, setItemContent] = useState('');

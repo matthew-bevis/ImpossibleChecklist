@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useState } from 'react'
 import { Fab, Box } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
-import classes from '../../_styles/mui-styles'
+import classes from '../../styles/mui-styles'
 import AddCategoryPopup from './add-category-popup'
 import { useCategories } from '../../contexts/CategoriesContext'
 

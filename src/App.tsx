@@ -1,8 +1,8 @@
 import { Grid, Typography } from '@mui/material'
 import './App.css'
-import classes from './_styles/mui-styles'
-import AddCategoryButton from './_components/AddCategory/add-category-button'
-import ListDisplay from './_components/ListDisplay/list-display'
+import classes from './styles/mui-styles'
+import AddCategoryButton from './components/AddCategory/add-category-button'
+import ListDisplay from './components/ListDisplay/list-display'
 import { CategoriesProvider, useCategories } from './contexts/CategoriesContext'
 
 function AppContent() {

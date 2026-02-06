@@ -1,6 +1,6 @@
 import React, { createContext, useContext, ReactNode } from 'react';
-import { useElectronData } from '../_hooks/useElectronData';
-import { Category } from '../_components/ListDisplay/interfaces/category';
+import { useElectronData } from '../hooks/useElectronData';
+import { Category } from '../components/ListDisplay/interfaces/category';
 
 interface CategoriesContextType {
     categories: Category[];

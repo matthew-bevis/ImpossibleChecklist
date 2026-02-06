@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Checkbox, FormGroup, FormControlLabel, Box } from "@mui/material"
-import classes from '../../_styles/mui-styles'
+import classes from '../../styles/mui-styles'
 import { CheckboxListProps } from './interfaces/checkbox-list-props'
 import { CheckedItemsState } from './interfaces/checked-items-state'
 import EditItemButton from "../EditItem/edit-item-button"

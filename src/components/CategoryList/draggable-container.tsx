@@ -2,7 +2,7 @@ import React from 'react';
 import { Draggable, DraggableProvided, DraggableStateSnapshot } from '@hello-pangea/dnd';
 import { Paper, Typography, Box } from '@mui/material';
 import CheckboxList from '../ItemList/checkbox';
-import classes from '../../_styles/mui-styles';
+import classes from '../../styles/mui-styles';
 import { DraggableContainerProps } from './interfaces/draggable-container-props';
 import DeleteCategoryButton from '../DeleteCategory/delete-category-button';
 import EditCategoryButton from '../EditCategory/edit-category-button';

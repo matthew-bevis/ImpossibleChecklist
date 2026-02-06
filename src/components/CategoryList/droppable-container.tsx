@@ -1,7 +1,7 @@
 import React from 'react';
 import { Droppable, DroppableProvided, DroppableStateSnapshot } from '@hello-pangea/dnd';
 import { Box } from '@mui/material';
-import classes from '../../_styles/mui-styles';
+import classes from '../../styles/mui-styles';
 
 interface DroppableContainerProps {
     children: (provided: DroppableProvided, snapshot: DroppableStateSnapshot) => React.ReactNode;

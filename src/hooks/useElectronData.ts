@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Category } from '../_components/ListDisplay/interfaces/category';
+import { Category } from '../components/ListDisplay/interfaces/category';
 import { ElectronData } from '../types/electron';
 
 interface UseElectronDataReturn {
